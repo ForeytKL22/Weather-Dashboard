@@ -43,8 +43,13 @@ var getWeatherForecast = function(search) {
                     console.log(data);
                     displaySearch(data, search)
                     getWeatherUvi(data.coord);
+
+                    storedCities.push(data.name);
+                    localStorage.setItem("searchHistory", JSON.stringify(storedCities));
+                    console.log(storedCities);
+                    
                 })
-            } 
+            }  
         });
 };
 
@@ -52,15 +57,14 @@ var getWeatherForecast = function(search) {
 var getWeatherUvi = function(data) {
     var {lat} = data;
     var {lon} = data;
-    var apiUrl2 = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&appid=d3f5af43f561d831f34569cf6fef321f";
+    var apiUrl2 = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&units=imperial&appid=d3f5af43f561d831f34569cf6fef321f";
     console.log(data);
     fetch(apiUrl2)
         .then(function(response) {
             if (response.ok) {
                 response.json().then(function(data) {
                     console.log(data);
-                    displaySearch2(data);
-                    
+                    displaySearch2(data);   
                 })
             }
         })
@@ -68,19 +72,16 @@ var getWeatherUvi = function(data) {
 }
 
 
-var displaySearch = function(weatherData, searchedCity) {
-    searchedCityName.textContent = searchedCity + currentDate;
+var displaySearch = function(data, searchedCity) {
+    searchedCityName.textContent = searchedCity + " " + currentDate;
 
-    cityTemp.textContent = "Temp: " + weatherData.main.temp;
+    cityTemp.textContent = "Temp: " + data.main.temp;
 
-    
-    pWind.textContent = "Wind speed: " + weatherData.wind.speed + " MPH";
+    pWind.textContent = "Wind speed: " + data.wind.speed + " MPH";
     cityTemp.appendChild(pWind);
 
-   
-    pHumidity.textContent = "Humidity: " + weatherData.main.humidity;
-    pWind.appendChild(pHumidity);
-    
+    pHumidity.textContent = "Humidity: " + data.main.humidity;
+    pWind.appendChild(pHumidity);  
 };
 
 
@@ -88,6 +89,32 @@ var displaySearch2 = function(data) {
 
     pUv.textContent = "UV Index: " + data.current.uvi;
     pWind.appendChild(pUv);
+
+    for (var i = 1; i < 6; i++) {
+        var fiveDays = document.getElementById("display-5-days");
+
+        var nextDayDiv = document.createElement("div");
+        nextDayDiv.classList = "col-3 border"
+        fiveDays.appendChild(nextDayDiv);
+
+        var nextDayEl = document.createElement("p");
+        var nextDayTemp = document.createElement("p");
+        var nextDayWind = document.createElement("p");
+        var nextDayHumidity = document.createElement("P");
+
+        
+
+        nextDayTemp.textContent = data.daily[i].temp.day;
+        nextDayDiv.appendChild(nextDayTemp);
+
+        nextDayWind.textContent = data.daily[i].wind_speed;
+        nextDayDiv.appendChild(nextDayWind);
+
+        nextDayHumidity.textContent = data.daily[i].humidity;
+        nextDayDiv.appendChild(nextDayHumidity);
+        
+    
+    }
 
 }
 
@@ -97,6 +124,9 @@ var fiveDayForecast = function(data) {
     fiveDayForecast();
 
 };
+
+
+
 
 
 

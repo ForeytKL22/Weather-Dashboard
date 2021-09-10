@@ -34,3 +34,11 @@ h1 {
 #current-city {
     border: solid black 1px;
 }
+
+p {
+    margin-bottom: 0;
+}
+
+.border {
+    border: solid black 1px;
+}
