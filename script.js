@@ -84,17 +84,20 @@ var displaySearch = function(data, searchedCity) {
     pWind.appendChild(pHumidity);  
 };
 
+var fiveDays = document.getElementById("display-5-days");
 
 var displaySearch2 = function(data) {
 
     pUv.textContent = "UV Index: " + data.current.uvi;
     pWind.appendChild(pUv);
 
+    fiveDays.innerHTML = '';
+
     for (var i = 1; i < 6; i++) {
-        var fiveDays = document.getElementById("display-5-days");
+        
 
         var nextDayDiv = document.createElement("div");
-        nextDayDiv.classList = "col-3 border"
+        nextDayDiv.classList = "col-2 border"
         fiveDays.appendChild(nextDayDiv);
 
         var nextDayEl = document.createElement("p");
@@ -103,14 +106,16 @@ var displaySearch2 = function(data) {
         var nextDayHumidity = document.createElement("P");
 
         
+        nextDayEl.textContent = moment.unix(data.daily[i].dt).format("L");
+        nextDayDiv.appendChild(nextDayEl);
 
-        nextDayTemp.textContent = data.daily[i].temp.day;
+        nextDayTemp.textContent = "Temp: " + data.daily[i].temp.day;
         nextDayDiv.appendChild(nextDayTemp);
 
-        nextDayWind.textContent = data.daily[i].wind_speed;
+        nextDayWind.textContent = "Wind: " + data.daily[i].wind_speed + " MPH";
         nextDayDiv.appendChild(nextDayWind);
 
-        nextDayHumidity.textContent = data.daily[i].humidity;
+        nextDayHumidity.textContent = "Humidity: " + data.daily[i].humidity;
         nextDayDiv.appendChild(nextDayHumidity);
         
     
