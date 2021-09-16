@@ -20,6 +20,7 @@ var storedCities = [];
 
 var clickSubmitEl = function(event) {
     event.preventDefault();
+    
 
     var inputEl = cityName.value.trim();
 
@@ -47,7 +48,7 @@ var getWeatherForecast = function(search) {
                     storedCities.push(data.name);
                     localStorage.setItem("searchHistory", JSON.stringify(storedCities));
                     console.log(storedCities);
-                    
+                    getSavedCities();
                 })
             }  
         });
@@ -118,10 +119,32 @@ var displaySearch2 = function(data) {
         nextDayHumidity.textContent = "Humidity: " + data.daily[i].humidity;
         nextDayDiv.appendChild(nextDayHumidity);
         
-    
+
     }
 
+
 }
+
+
+var getSavedCities = function() {
+
+    var searchHistoryDiv = document.getElementById("search-history");
+
+    searchHistoryDiv.innerHTML = '';
+
+    if (localStorage.getItem("searchHistory") !== null) {
+        
+        var cities = JSON.parse(localStorage.getItem("searchHistory"));
+
+        for (i = 0; i < cities.length; i++) {
+            var storedCity = document.createElement("button");
+            
+            storedCity.textContent = cities[i];
+            searchHistoryDiv.appendChild(storedCity);
+        }
+    } 
+};
+
 
 
 var fiveDayForecast = function(data) {
@@ -136,3 +159,5 @@ var fiveDayForecast = function(data) {
 
 
 searchFormEl.addEventListener("submit", clickSubmitEl);
+
+getSavedCities();
